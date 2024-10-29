@@ -1,15 +1,17 @@
 package actions;
 
-import logic.Drawing;
+import shapes.VectorDrawing;
 import shapes.Shape;
+
+import java.awt.*;
 
 /**
  * AddAction implements a single undoable action where a Shape is added to a
  * Drawing.
  */
-public class AddAction implements DrawAction {
+public class AddAction extends MoveUpdatableAction {
 
-	Drawing d;
+	VectorDrawing d;
 	Shape s;
 
 	/**
@@ -20,7 +22,7 @@ public class AddAction implements DrawAction {
 	 * @param sh
 	 *            the shape to be added.
 	 */
-	public AddAction(Drawing dr, Shape sh) {
+	public AddAction(VectorDrawing dr, Shape sh) {
 		this.d = dr;
 		this.s = sh;
 	}
@@ -41,4 +43,8 @@ public class AddAction implements DrawAction {
 		d.removeShape(s);
 	}
 
+	public AddAction moveUpdate(Point m) {
+		this.s.updatePoint2(m);
+		return this;
+	}
 }

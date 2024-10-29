@@ -2,14 +2,14 @@ package actions;
 
 import java.awt.Point;
 
-import logic.Selection;
+import shapes.Selection;
 import shapes.Shape;
 
 /**
  * MoveAction implements a single undoable action where all the Shapes in a
  * given Selection are moved.
  */
-public class MoveAction implements DrawAction {
+public class MoveAction extends MoveUpdatableAction {
 
 	Selection selected;
 	Point movement;
@@ -50,4 +50,8 @@ public class MoveAction implements DrawAction {
 		}
 	}
 
+	public MoveAction moveUpdate(Point m) {
+		Point newPoint = new Point(this.movement.x + m.x, this.movement.y + m.y);
+		return new MoveAction(this.selected.clone(), newPoint);
+	}
 }

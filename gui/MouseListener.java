@@ -51,7 +51,6 @@ public class MouseListener extends MouseAdapter {
 		this.c = c;
 		this.newShape = null;
 		this.mouseDelta = new Point(0, 0);
-
 	}
 
 	public void mouseDragged(MouseEvent m) {
@@ -59,20 +58,16 @@ public class MouseListener extends MouseAdapter {
 		mouseDelta.x = m.getPoint().x - lastPos.x;
 		mouseDelta.y = m.getPoint().y - lastPos.y;
 
-		if (isDrawing && (newShape != null)) {
-			newShape.setPoint2(lastPos);
-		}
-
-		if (c.getTool() == Tool.SELECT) {
-			for (Shape s : c.getSelection()) {
-				s.move(mouseDelta.x, mouseDelta.y);
-			}
-		}
+		c.moveUpdate(mouseDelta);
+//		if (isDrawing && (newShape != null)) {
+//			newShape.setPoint2(lastPos);
+//			c.getDrawing().repaint();
+//		}
+//
+//		c.moveSelectedShapes(mouseDelta);
 
 		c.getDrawing().repaint();
-
 		lastPos = m.getPoint();
-
 	}
 
 	public void mouseMoved(MouseEvent m) {
@@ -84,6 +79,7 @@ public class MouseListener extends MouseAdapter {
 
 		Tool t = c.getTool();
 		isDrawing = true;
+		c.setIsActionStart(true);
 
 		if (t == Tool.SELECT) {
 
@@ -111,11 +107,9 @@ public class MouseListener extends MouseAdapter {
 				}
 
 				c.getSelection().add(tmp);
-
 			}
 
 			c.getDrawing().repaint();
-
 		}
 		else if (t == Tool.RECTANGLE) {
 			newShape = new Rectangle(startPos.x, startPos.y, tools.getFill());
@@ -146,16 +140,9 @@ public class MouseListener extends MouseAdapter {
 		isDrawing = false;
 		newShape = null;
 
-		if (c.getTool() == Tool.SELECT) {
-
-			Point total = new Point(m.getPoint().x - startPos.x, m.getPoint().y
-					- startPos.y);
-
-			if ((total.x != 0) || (total.y != 0)) {
-				c.recordMovement(total);
-			}
-
-		}
+//		if (c.getTool() == Tool.SELECT) {
+//			c.recordMovement();
+//		}
 	}
 
 }

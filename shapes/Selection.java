@@ -3,7 +3,7 @@ package shapes;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Selection implements Iterable<Shape> {
+public class Selection implements ImmutableSelection {
 
 	private ArrayList<Shape> selected;
 
@@ -18,7 +18,6 @@ public class Selection implements Iterable<Shape> {
 	public void add(Shape s) {
 		if (!selected.contains(s)) {
 			selected.add(s);
-			s.setSelected(true);
 		}
 	}
 
@@ -33,9 +32,6 @@ public class Selection implements Iterable<Shape> {
 	}
 
 	public void empty() {
-		for (Shape s : selected) {
-			s.setSelected(false);
-		}
 		selected.clear();
 	}
 

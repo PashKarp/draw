@@ -1,9 +1,6 @@
 package shapes;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 
 public abstract class FillableShape extends Shape {
 
@@ -34,12 +31,24 @@ public abstract class FillableShape extends Shape {
 		return filled;
 	}
 
-	public void setFilled(boolean f) {
-		filled = f;
+	public FillableShape setFilled(boolean f) {
+		FillableShape shape = clone();
+
+		shape.filled = f;
+
+		return shape;
 	}
 
 	public String toString() {
 		return super.toString() + ";" + (filled ? 1 : 0);
 	}
 
+	@Override
+	public FillableShape clone() {
+		FillableShape clone = (FillableShape) super.clone();
+
+		clone.filled = filled;
+
+		return clone;
+	}
 }

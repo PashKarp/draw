@@ -3,6 +3,7 @@ package actions;
 import java.awt.Color;
 
 import shapes.Shape;
+import shapes.VectorDrawing;
 
 /**
  * DeleteAction implements a single undoable action where the color of a Shape
@@ -16,6 +17,8 @@ public class ColorAction implements DrawAction {
 	Color oldColor;
 	Color newColor;
 
+	VectorDrawing d;
+
 	/**
 	 * Creates an ColorAction that changes the color of a given Shape.
 	 * 
@@ -24,15 +27,14 @@ public class ColorAction implements DrawAction {
 	 * @param newColor
 	 *            the new color for the shape.
 	 */
-	public ColorAction(Shape s, Color newColor) {
+	public ColorAction(Shape s, Color newColor, VectorDrawing d) {
 		shape = s;
 		this.oldColor = s.getColor();
 		this.newColor = newColor;
+		this.d = d;
 	}
 
-	public void execute() {
-		shape.setColor(newColor);
-	}
+	public void execute() { d.colorShape(shape, newColor); }
 
 	public String getDescription() {
 		return null;
@@ -43,7 +45,7 @@ public class ColorAction implements DrawAction {
 	}
 
 	public void undo() {
-		shape.setColor(oldColor);
+		d.colorShape(shape, oldColor);
 	}
 
 }

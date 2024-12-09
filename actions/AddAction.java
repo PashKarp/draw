@@ -44,7 +44,7 @@ public class AddAction extends MoveUpdatableAction {
 	}
 
 	public AddAction moveUpdate(Point m) {
-		this.s.updatePoint2(m);
+		s = s.updatePoint2(m);
 		return this;
 	}
 }

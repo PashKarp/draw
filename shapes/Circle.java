@@ -1,6 +1,6 @@
 package shapes;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Circle extends FillableShape {
 
@@ -19,5 +19,10 @@ public class Circle extends FillableShape {
 
 	public String toString() {
 		return "circ;" + super.toString();
+	}
+
+	@Override
+	public Circle clone() {
+		return (Circle) super.clone();
 	}
 }

@@ -87,7 +87,7 @@ public class MouseListener extends MouseAdapter {
 
 			if (((m.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == 0)
 					&& !c.getSelection().contains(tmp)) {
-				c.getSelection().empty();
+				c.getDrawing().emptySelection();
 			}
 
 			if ((tmp != null) && (!c.getSelection().contains(tmp))) {
@@ -106,7 +106,7 @@ public class MouseListener extends MouseAdapter {
 					tools.setFontSize(((Text) tmp).getFont().getSize());
 				}
 
-				c.getSelection().add(tmp);
+				c.getDrawing().addShapeToSelection(tmp);
 			}
 
 			c.getDrawing().repaint();
@@ -130,7 +130,7 @@ public class MouseListener extends MouseAdapter {
 		}
 
 		if (newShape != null) {
-			newShape.setColor(tools.getColor());
+			newShape = newShape.setColor(tools.getColor());
 			c.addShape(newShape);
 		}
 

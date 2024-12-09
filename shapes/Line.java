@@ -1,9 +1,6 @@
 package shapes;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 
 public class Line extends Shape {
 
@@ -24,4 +21,8 @@ public class Line extends Shape {
 		return "line;" + super.toString();
 	}
 
+	@Override
+	public Line clone() {
+		return (Line) super.clone();
+	}
 }

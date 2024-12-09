@@ -1,6 +1,6 @@
 package shapes;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Rectangle extends FillableShape {
 
@@ -21,4 +21,8 @@ public class Rectangle extends FillableShape {
 		return "rect;" + super.toString();
 	}
 
+	@Override
+	public Rectangle clone() {
+		return (Rectangle) super.clone();
+	}
 }

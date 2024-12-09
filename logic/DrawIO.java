@@ -20,7 +20,7 @@ public class DrawIO {
 
 	public void export(File f, DrawingController c) {
 		try {
-			c.getSelection().empty();
+			c.getDrawing().emptySelection();
 			BufferedImage bi = c.getDrawing().getImage(); // retrieve image
 			ImageIO.write(bi, "png", f);
 		}
@@ -81,9 +81,8 @@ public class DrawIO {
 					}
 
 					if (sh != null) {
-						sh.setPoint2(p2);
-						sh
-								.setColor(new Color(Integer.parseInt(parts[3]
+						sh = sh.setPoint2(p2);
+						sh = sh.setColor(new Color(Integer.parseInt(parts[3]
 										.trim())));
 						c.getDrawing().insertShape(sh);
 					}

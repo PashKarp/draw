@@ -1,7 +1,7 @@
 package actions;
 
+import shapes.ImmutableSelection;
 import shapes.VectorDrawing;
-import shapes.Selection;
 import shapes.Shape;
 
 /**
@@ -11,7 +11,7 @@ import shapes.Shape;
 public class DeleteAction implements DrawAction {
 
 	VectorDrawing d;
-	Selection selection;
+	ImmutableSelection selection;
 
 	int position;
 
@@ -24,10 +24,8 @@ public class DeleteAction implements DrawAction {
 	 * @param selection
 	 *            the shape to be added.
 	 */
-	public DeleteAction(VectorDrawing drawing, Selection selection) {
-		// The selection need to be hard-copied because the selection behind the
-		// reference will change while editing the drawing.
-		this.selection = selection.clone();
+	public DeleteAction(VectorDrawing drawing, ImmutableSelection selection) {
+		this.selection = selection;
 		this.d = drawing;
 	}
 

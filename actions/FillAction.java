@@ -1,8 +1,9 @@
 package actions;
 
-import shapes.Selection;
+import shapes.ImmutableSelection;
 import shapes.FillableShape;
 import shapes.Shape;
+import shapes.VectorDrawing;
 
 /**
  * FillAction implements a undoable action where the fill status of all the
@@ -10,7 +11,8 @@ import shapes.Shape;
  */
 public class FillAction implements DrawAction {
 
-	Selection selected;
+	ImmutableSelection selected;
+	VectorDrawing d;
 
 	/**
 	 * Creates a FillAction that filps the fill status of all FillableShape
@@ -19,16 +21,14 @@ public class FillAction implements DrawAction {
 	 * @param s
 	 *            a selection which contains the shapes to be modified
 	 */
-	public FillAction(Selection s) {
-		this.selected = s.clone();
+	public FillAction(ImmutableSelection s, VectorDrawing d) {
+		this.selected = s;
+		this.d = d;
 	}
 
 	public void execute() {
 		for (Shape s : selected) {
-			if (s instanceof FillableShape) {
-				FillableShape fs = (FillableShape) s;
-				fs.setFilled(!(fs).getFilled());
-			}
+			d.fillShape(s);
 		}
 	}
 

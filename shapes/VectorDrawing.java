@@ -15,10 +15,14 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 
 	private static final long serialVersionUID = 0;
 
+	private Selection selection;
+
 	private ArrayList<Shape> shapes;
 
 	public VectorDrawing(Dimension size) {
 		shapes = new ArrayList<Shape>(0);
+
+		selection = new Selection();
 
 		this.setPreferredSize(size);
 		setBorder(BorderFactory.createLineBorder(Color.black));
@@ -48,7 +52,39 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 	}
 
 	public void insertShape(Shape s) {
-		shapes.add(s);
+		shapes.add(s.setDrawing(this));
+	}
+
+	private Shape getRealShape(Shape s) {
+		int shapeIndex = shapes.indexOf(s);
+		if (shapeIndex != -1) {
+			return shapes.get(shapeIndex);
+		}
+
+		return null;
+	}
+
+	public void colorShape(Shape s, Color color) {
+		Shape shape = getRealShape(s);
+
+		shapes.remove(shape);
+		shapes.add(shape.setColor(color));
+	}
+
+	public void fillShape(Shape s) {
+		if (s instanceof FillableShape) {
+			Shape shape = getRealShape(s);
+			shapes.remove(shape);
+
+			FillableShape fs = (FillableShape) shape;
+			shapes.add(fs.setFilled(!(fs).getFilled()));
+		}
+	}
+
+	public void moveShape(Shape s, Point movement) {
+		Shape shape = getRealShape(s);
+		shapes.remove(shape);
+		shapes.add(shape.move(movement.x, movement.y));
 	}
 
 	@Override
@@ -96,4 +132,15 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 		shapes.remove(s);
 	}
 
+	public ImmutableSelection getSelection() {
+		return selection.clone();
+	}
+
+	public void addShapeToSelection(Shape s) {
+		selection.add(s);
+	}
+
+	public void emptySelection() {
+		selection.empty();
+	}
 }

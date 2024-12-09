@@ -2,8 +2,9 @@ package actions;
 
 import java.awt.Point;
 
-import shapes.Selection;
+import shapes.ImmutableSelection;
 import shapes.Shape;
+import shapes.VectorDrawing;
 
 /**
  * MoveAction implements a single undoable action where all the Shapes in a
@@ -11,8 +12,10 @@ import shapes.Shape;
  */
 public class MoveAction extends MoveUpdatableAction {
 
-	Selection selected;
+	ImmutableSelection selected;
 	Point movement;
+
+	VectorDrawing d;
 
 	/**
 	 * Creates a MoveAction that moves all Shapes in the given Selection in the
@@ -25,14 +28,15 @@ public class MoveAction extends MoveUpdatableAction {
 	 *            the amount the shapes should be moved, relative to the
 	 *            original position
 	 */
-	public MoveAction(Selection s, Point m) {
-		this.selected = s.clone();
+	public MoveAction(ImmutableSelection s, Point m, VectorDrawing d) {
+		this.selected = s;
 		this.movement = m;
+		this.d = d;
 	}
 
 	public void execute() {
 		for (Shape s : selected) {
-			s.move(movement.x, movement.y);
+			d.moveShape(s, movement);
 		}
 	}
 
@@ -45,13 +49,15 @@ public class MoveAction extends MoveUpdatableAction {
 	}
 
 	public void undo() {
+		Point reverseMovement = new Point(-movement.x, -movement.y);
+
 		for (Shape s : selected) {
-			s.move(-movement.x, -movement.y);
+			d.moveShape(s, reverseMovement);
 		}
 	}
 
 	public MoveAction moveUpdate(Point m) {
 		Point newPoint = new Point(this.movement.x + m.x, this.movement.y + m.y);
-		return new MoveAction(this.selected.clone(), newPoint);
+		return new MoveAction(this.selected, newPoint, d);
 	}
 }

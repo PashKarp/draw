@@ -1,10 +1,6 @@
 package shapes;
 
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
+import java.awt.*;
 
 import javax.swing.JOptionPane;
 
@@ -71,4 +67,12 @@ public class Text extends Shape {
 				+ text.replace(';', '?');
 	}
 
+	public Text clone() {
+		Text clone = (Text) super.clone();
+
+		clone.font = font;
+		clone.text = text;
+
+		return clone;
+	}
 }

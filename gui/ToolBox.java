@@ -168,7 +168,7 @@ public class ToolBox extends JToolBar implements ActionListener,
 			c.setTool(Tool.SELECT);
 		}
 		else if (!source.equals(colorbutton)) {
-			c.getSelection().empty();
+			c.getDrawing().emptySelection();
 			c.getDrawing().repaint();
 		}
 

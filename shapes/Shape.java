@@ -118,6 +118,10 @@ public abstract class Shape {
 		this.point2 = p;
 	}
 
+	public void updatePoint2(Point m) {
+		this.setPoint2(new Point(this.point2.x + m.x, this.point2.y + m.y));
+	}
+
 	public void setSelected(boolean b) {
 		selected = b;
 	}

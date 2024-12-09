@@ -1,9 +1,7 @@
-package logic;
+package shapes;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import shapes.Shape;
 
 public class Selection implements Iterable<Shape> {
 

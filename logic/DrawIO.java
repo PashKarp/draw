@@ -14,11 +14,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import shapes.Circle;
-import shapes.Line;
-import shapes.Rectangle;
-import shapes.Shape;
-import shapes.Text;
+import shapes.*;
 
 public class DrawIO {
 
@@ -111,7 +107,7 @@ public class DrawIO {
 	}
 
 	public void save(File f, DrawingController c) {
-		Drawing d = c.getDrawing();
+		VectorDrawing d = c.getDrawing();
 
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(f));

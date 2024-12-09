@@ -1,5 +1,6 @@
 package actions;
 
+import java.awt.*;
 import java.util.Stack;
 
 /**
@@ -22,6 +23,8 @@ public class UndoManager {
 	private Stack<DrawAction> undoStack;
 	private Stack<DrawAction> redoStack;
 
+	private DrawAction lastAction;
+
 	/**
 	 * Constructs a empty Undo Manager.
 	 */
@@ -38,7 +41,13 @@ public class UndoManager {
 	 */
 	public void addAction(DrawAction action) {
 		this.redoStack.clear();
-		this.undoStack.push(action);
+
+		if (lastAction != null) {
+			this.undoStack.push(lastAction);
+			lastAction = action;
+		} else {
+			lastAction = action;
+		}
 	}
 
 	/**
@@ -48,7 +57,7 @@ public class UndoManager {
 	 */
 
 	public boolean canRedo() {
-		return !this.redoStack.isEmpty();
+		return !this.redoStack.isEmpty() ;
 	}
 
 	/**
@@ -57,7 +66,7 @@ public class UndoManager {
 	 * @return boolean value telling if an undo is possible to perform.
 	 */
 	public boolean canUndo() {
-		return !this.undoStack.isEmpty();
+		return !this.undoStack.isEmpty() || lastAction != null;
 	}
 
 	/**
@@ -75,9 +84,25 @@ public class UndoManager {
 	 * the undo stack.
 	 */
 	public void undo() {
-		DrawAction action = this.undoStack.pop();
+		DrawAction action;
+
+		if (lastAction == null) {
+			action = this.undoStack.pop();
+		} else {
+			action = lastAction;
+			lastAction = null;
+		}
 		action.undo();
 		this.redoStack.push(action);
 	}
 
+	public void updateMoveUpdatableAction(Point m) {
+		if (lastAction instanceof MoveUpdatableAction) {
+			lastAction.undo();
+			lastAction = ((MoveUpdatableAction) lastAction).moveUpdate(m);
+			lastAction.execute();
+		} else {
+//			throw new IllegalStateException();
+		}
+	}
 }

@@ -11,7 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import logic.Drawing;
+import shapes.VectorDrawing;
 import logic.DrawingController;
 
 /**
@@ -38,7 +38,7 @@ public class DrawGUI extends JFrame {
 			super(new GridBagLayout());
 		}
 
-		public void setDrawing(Drawing d) {
+		public void setDrawing(VectorDrawing d) {
 			this.removeAll();
 			this.add(d);
 			mouse = new MouseListener(controller, tools);

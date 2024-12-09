@@ -1,4 +1,4 @@
-package logic;
+package shapes;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,15 +11,13 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import shapes.Shape;
-
-public class Drawing extends JPanel implements Iterable<Shape> {
+public class VectorDrawing extends JPanel implements Iterable<Shape> {
 
 	private static final long serialVersionUID = 0;
 
 	private ArrayList<Shape> shapes;
 
-	public Drawing(Dimension size) {
+	public VectorDrawing(Dimension size) {
 		shapes = new ArrayList<Shape>(0);
 
 		this.setPreferredSize(size);

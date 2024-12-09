@@ -8,12 +8,9 @@ public class Line extends Shape {
 		super(new Point(x, y));
 	}
 
-	public void drawShape(Graphics g) {
-
-		((Graphics2D) g).setStroke(new BasicStroke((float) strokeWidth));
-
-		g.drawLine(point1.x, point1.y, point2.x, point2.y);
-
+	@Override
+	public ShapeType getType() {
+		return ShapeType.Line;
 	}
 
 	@Override

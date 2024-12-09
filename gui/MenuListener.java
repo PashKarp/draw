@@ -58,7 +58,6 @@ public class MenuListener implements ActionListener {
 
 		else if (cmd.equals("Clear selection")) {
 			controller.getDrawing().emptySelection();
-			controller.getDrawing().repaint();
 		}
 
 		else if (cmd.equals("Delete")) {
@@ -112,7 +111,7 @@ public class MenuListener implements ActionListener {
 
 			File f = fileDialog.getSelectedFile();
 			if (f != null) {
-				fio.export(f, controller);
+				fio.export(f, controller, controller.getGui().getDrawingContainer());
 			}
 
 		}
@@ -120,9 +119,8 @@ public class MenuListener implements ActionListener {
 		else if (cmd.equals("New")) {
 			NewDrawingDialog diag = new NewDrawingDialog();
 			Dimension size = diag.getNewSize();
-			System.out.println(size);
 			if (size != null) {
-				controller.newDrawing(size);
+				controller.newDrawing();
 			}
 		}
 

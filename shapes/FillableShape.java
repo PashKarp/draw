@@ -11,22 +11,6 @@ public abstract class FillableShape extends Shape {
 		filled = false;
 	}
 
-	public abstract void drawFilled(Graphics g);
-
-	public abstract void drawNonFilled(Graphics g);
-
-	public void drawShape(Graphics g) {
-
-		((Graphics2D) g).setStroke(new BasicStroke((float) strokeWidth));
-
-		if (filled) {
-			drawFilled(g);
-		}
-		else {
-			drawNonFilled(g);
-		}
-	}
-
 	public boolean getFilled() {
 		return filled;
 	}

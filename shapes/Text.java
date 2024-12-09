@@ -48,18 +48,17 @@ public class Text extends Shape {
 
 	}
 
-	public void drawShape(Graphics g) {
-
-		g.setFont(font);
-		int w = g.getFontMetrics().stringWidth(text);
-		setPoint2(new Point(point1.x + w, point1.y - font.getSize()));
-		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g.drawString(text, point1.x, point1.y);
+	public String getText() {
+		return text;
 	}
 
 	public Font getFont() {
 		return font;
+	}
+
+	@Override
+	public ShapeType getType() {
+		return ShapeType.Text;
 	}
 
 	public String toString() {

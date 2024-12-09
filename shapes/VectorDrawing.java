@@ -11,7 +11,7 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-public class VectorDrawing extends JPanel implements Iterable<Shape> {
+public class VectorDrawing implements Iterable<Shape> {
 
 	private static final long serialVersionUID = 0;
 
@@ -19,23 +19,12 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 
 	private ArrayList<Shape> shapes;
 
-	public VectorDrawing(Dimension size) {
-		shapes = new ArrayList<Shape>(0);
+	private ArrayList<DrawingListener> listeners;
 
+	public VectorDrawing() {
+		shapes = new ArrayList<Shape>();
+		listeners = new ArrayList<DrawingListener>();
 		selection = new Selection();
-
-		this.setPreferredSize(size);
-		setBorder(BorderFactory.createLineBorder(Color.black));
-		setBackground(Color.WHITE);
-	}
-
-	public BufferedImage getImage() {
-
-		BufferedImage bi = new BufferedImage(getPreferredSize().width,
-				getPreferredSize().height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = bi.createGraphics();
-		this.print(g);
-		return bi;
 	}
 
 	public Shape getShapeAt(Point p) {
@@ -52,7 +41,9 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 	}
 
 	public void insertShape(Shape s) {
-		shapes.add(s.setDrawing(this));
+		Shape shape = s.setDrawing(this);
+		shapes.add(shape);
+		fireShapeAppended(shape);
 	}
 
 	private Shape getRealShape(Shape s) {
@@ -68,7 +59,11 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 		Shape shape = getRealShape(s);
 
 		shapes.remove(shape);
-		shapes.add(shape.setColor(color));
+
+		Shape updatedShape = shape.setColor(color);
+		shapes.add(updatedShape);
+
+		fireShapeUpdated(updatedShape);
 	}
 
 	public void fillShape(Shape s) {
@@ -77,14 +72,22 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 			shapes.remove(shape);
 
 			FillableShape fs = (FillableShape) shape;
-			shapes.add(fs.setFilled(!(fs).getFilled()));
+
+			Shape updatedShape = fs.setFilled(!(fs).getFilled());
+			shapes.add(updatedShape);
+
+			fireShapeUpdated(updatedShape);
 		}
 	}
 
 	public void moveShape(Shape s, Point movement) {
 		Shape shape = getRealShape(s);
 		shapes.remove(shape);
-		shapes.add(shape.move(movement.x, movement.y));
+
+		Shape updatedShape = shape.move(movement.x, movement.y);
+		shapes.add(updatedShape);
+
+		fireShapeUpdated(updatedShape);
 	}
 
 	@Override
@@ -112,14 +115,6 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 		return shapes.size();
 	}
 
-	public void paintComponent(Graphics g) {
-
-		super.paintComponent(g);
-		for (Shape s : shapes) {
-			s.draw(g);
-		}
-	}
-
 	public void raise(Shape s) {
 		int index = shapes.indexOf(s);
 		if (index > 0) {
@@ -130,6 +125,8 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 
 	public void removeShape(Shape s) {
 		shapes.remove(s);
+
+		fireShapeDeleted(s);
 	}
 
 	public ImmutableSelection getSelection() {
@@ -138,9 +135,53 @@ public class VectorDrawing extends JPanel implements Iterable<Shape> {
 
 	public void addShapeToSelection(Shape s) {
 		selection.add(s);
+
+		fireShapeAppendedToSelection(s);
 	}
 
 	public void emptySelection() {
 		selection.empty();
+
+		fireSelectionCleared();
+	}
+
+	public void addDrawingListener(DrawingListener listener) {
+		if (! listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeDrawingListener(DrawingListener listener) {
+		listeners.remove(listener);
+	}
+
+	private void fireShapeAppended(Shape s) {
+		for (DrawingListener listener : listeners) {
+			listener.shapeAppended(s);
+		}
+	}
+
+	private void fireShapeDeleted(Shape s) {
+		for (DrawingListener listener : listeners) {
+			listener.shapeDeleted(s);
+		}
+	}
+
+	private void fireShapeUpdated(Shape s) {
+		for (DrawingListener listener : listeners) {
+			listener.shapeUpdated(s);
+		}
+	}
+
+	private void fireShapeAppendedToSelection(Shape s) {
+		for (DrawingListener listener : listeners) {
+			listener.shapeAppendedToSelection(s);
+		}
+	}
+
+	private void fireSelectionCleared() {
+		for (DrawingListener listener : listeners) {
+			listener.selectionCleared();
+		}
 	}
 }

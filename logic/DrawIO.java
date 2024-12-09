@@ -14,14 +14,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import gui.DrawGUI;
 import shapes.*;
 
 public class DrawIO {
 
-	public void export(File f, DrawingController c) {
+	public void export(File f, DrawingController c, DrawGUI.DrawingContainer container) {
 		try {
 			c.getDrawing().emptySelection();
-			BufferedImage bi = c.getDrawing().getImage(); // retrieve image
+			BufferedImage bi = container.getImage(); // retrieve image
 			ImageIO.write(bi, "png", f);
 		}
 		catch (IOException e) {
@@ -43,7 +44,7 @@ public class DrawIO {
 			String str;
 
 			Point p = getPoint(in.readLine());
-			c.newDrawing(new Dimension(p.x, p.y));
+			c.newDrawing();
 
 			while ((str = in.readLine()) != null) {
 				try {
@@ -110,9 +111,6 @@ public class DrawIO {
 
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(f));
-
-			out.write(d.getPreferredSize().width + ","
-					+ d.getPreferredSize().height + "\n");
 
 			for (Shape s : c.getDrawing()) {
 				out.write(s.toString() + "\n");

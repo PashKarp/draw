@@ -3,7 +3,6 @@ package logic;
 import gui.DrawGUI;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
 
 import shapes.ImmutableSelection;
@@ -38,7 +37,6 @@ public class DrawingController {
 		DrawAction add = new AddAction(drawing, s);
 		add.execute();
 		undoManager.addAction(add);
-		getDrawing().repaint();
 		isActionStart = false;
 	}
 
@@ -54,7 +52,6 @@ public class DrawingController {
 		DrawAction del = new DeleteAction(drawing, drawing.getSelection());
 		del.execute();
 		undoManager.addAction(del);
-		drawing.repaint();
 	}
 
 	public VectorDrawing getDrawing() {
@@ -67,6 +64,10 @@ public class DrawingController {
 
 	public Tool getTool() {
 		return tool;
+	}
+
+	public DrawGUI getGui() {
+		return gui;
 	}
 
 	public void moveSelectedShapes(Point movement) {
@@ -95,8 +96,8 @@ public class DrawingController {
 		}
 	}
 
-	public void newDrawing(Dimension size) {
-		drawing = new VectorDrawing(size);
+	public void newDrawing() {
+		drawing = new VectorDrawing();
 		if (gui != null) {
 			gui.updateDrawing();
 		}
@@ -117,7 +118,6 @@ public class DrawingController {
 		if (this.undoManager.canRedo()) {
 			this.undoManager.redo();
 		}
-		drawing.repaint();
 	}
 
 	public void selectAll() {
@@ -125,7 +125,6 @@ public class DrawingController {
 		for (Shape sh : drawing) {
 			drawing.addShapeToSelection(sh);
 		}
-		drawing.repaint();
 
 	}
 
@@ -143,7 +142,6 @@ public class DrawingController {
 		if (this.undoManager.canUndo()) {
 			this.undoManager.undo();
 		}
-		drawing.repaint();
 	}
 
 	public void setIsActionStart(boolean isActionStart) {

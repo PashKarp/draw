@@ -1,4 +1,4 @@
-package actions;
+package logic.actions;
 
 import shapes.VectorDrawing;
 import shapes.Shape;

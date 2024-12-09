@@ -1,4 +1,4 @@
-package actions;
+package logic.actions;
 
 /**
  * This interface depicts a single undoable drawing action.

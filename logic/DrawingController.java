@@ -8,13 +8,13 @@ import java.awt.Point;
 import shapes.ImmutableSelection;
 import shapes.VectorDrawing;
 import shapes.Shape;
-import actions.AddAction;
-import actions.ColorAction;
-import actions.DeleteAction;
-import actions.DrawAction;
-import actions.FillAction;
-import actions.MoveAction;
-import actions.UndoManager;
+import logic.actions.AddAction;
+import logic.actions.ColorAction;
+import logic.actions.DeleteAction;
+import logic.actions.DrawAction;
+import logic.actions.FillAction;
+import logic.actions.MoveAction;
+import logic.actions.UndoManager;
 
 public class DrawingController {
 

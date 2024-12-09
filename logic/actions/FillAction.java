@@ -1,7 +1,6 @@
-package actions;
+package logic.actions;
 
 import shapes.ImmutableSelection;
-import shapes.FillableShape;
 import shapes.Shape;
 import shapes.VectorDrawing;
 

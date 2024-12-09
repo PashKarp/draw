@@ -1,4 +1,4 @@
-package actions;
+package logic.actions;
 
 import java.awt.*;
 import java.util.Stack;
@@ -6,7 +6,7 @@ import java.util.Stack;
 /**
  * UndoManager is a simplistic reusable component to support an undo-redo
  * mechanism. UndoableActions can be added in the manager, which gives a
- * centered interface for performing their undo and redo actions.
+ * centered interface for performing their undo and redo logic.actions.
  * 
  * 
  * !!!!!!!!!!!!!!! Mostly copied from exercise 2.2 & 2.3

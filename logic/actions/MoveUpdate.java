@@ -1,4 +1,4 @@
-package actions;
+package logic.actions;
 
 import java.awt.*;
 

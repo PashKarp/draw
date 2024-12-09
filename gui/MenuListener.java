@@ -16,7 +16,7 @@ import logic.DrawIO;
 import logic.DrawingController;
 
 /**
- * Listens to actions from the buttons in a menu and modifies the Drawing
+ * Listens to logic.actions from the buttons in a menu and modifies the Drawing
  * through a DrawingController
  * 
  * @author Alex Lagerstedt

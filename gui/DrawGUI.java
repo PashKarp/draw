@@ -100,11 +100,22 @@ public class DrawGUI extends JFrame {
 
 			@Override
 			public void shapeAppendedToSelection(Shape s) {
+				ShapeAdapter adapter = AdapterFactory.create(s);
+
+				shapesAdapters.remove(adapter);
+				shapesAdapters.add(adapter);
 				repaint();
 			}
 
 			@Override
-			public void selectionCleared() {
+			public void selectionCleared(ArrayList<Shape> shapes) {
+				for (Shape s : shapes) {
+					ShapeAdapter adapter = AdapterFactory.create(s);
+
+					shapesAdapters.remove(adapter);
+					shapesAdapters.add(adapter);
+				}
+
 				repaint();
 			}
 		}

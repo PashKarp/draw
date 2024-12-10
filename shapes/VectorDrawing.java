@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -15,8 +16,6 @@ public class VectorDrawing implements Iterable<Shape> {
 
 	private static final long serialVersionUID = 0;
 
-	private Selection selection;
-
 	private ArrayList<Shape> shapes;
 
 	private ArrayList<DrawingListener> listeners;
@@ -24,7 +23,6 @@ public class VectorDrawing implements Iterable<Shape> {
 	public VectorDrawing() {
 		shapes = new ArrayList<Shape>();
 		listeners = new ArrayList<DrawingListener>();
-		selection = new Selection();
 	}
 
 	public Shape getShapeAt(Point p) {
@@ -41,9 +39,8 @@ public class VectorDrawing implements Iterable<Shape> {
 	}
 
 	public void insertShape(Shape s) {
-		Shape shape = s.setDrawing(this);
-		shapes.add(shape);
-		fireShapeAppended(shape);
+		shapes.add(s);
+		fireShapeAppended(s);
 	}
 
 	private Shape getRealShape(Shape s) {
@@ -130,19 +127,33 @@ public class VectorDrawing implements Iterable<Shape> {
 	}
 
 	public ImmutableSelection getSelection() {
-		return selection.clone();
+		Selection selection = new Selection();
+
+		for (Shape shape : shapes) {
+			if (shape.isSelected()) {
+				selection.add(shape);
+			}
+		}
+
+		return selection;
 	}
 
 	public void addShapeToSelection(Shape s) {
-		selection.add(s);
+		Shape realShape = getRealShape(s);
 
-		fireShapeAppendedToSelection(s);
+		shapes.remove(realShape);
+
+		Shape selectedShape = realShape.setSelected(true);
+
+		shapes.add(selectedShape);
+
+		fireShapeAppendedToSelection(selectedShape);
 	}
 
 	public void emptySelection() {
-		selection.empty();
+		shapes = (ArrayList<Shape>) shapes.stream().map(s -> s.setSelected(false)).collect(Collectors.toList());
 
-		fireSelectionCleared();
+		fireSelectionCleared((ArrayList<Shape>) shapes.clone());
 	}
 
 	public void addDrawingListener(DrawingListener listener) {
@@ -179,9 +190,9 @@ public class VectorDrawing implements Iterable<Shape> {
 		}
 	}
 
-	private void fireSelectionCleared() {
+	private void fireSelectionCleared(ArrayList<Shape> shapes) {
 		for (DrawingListener listener : listeners) {
-			listener.selectionCleared();
+			listener.selectionCleared(shapes);
 		}
 	}
 }

@@ -11,7 +11,7 @@ public abstract class Shape implements Cloneable {
 	protected Color color;
 	protected double strokeWidth;
 
-	VectorDrawing drawing;
+	protected boolean isSelected;
 
 	private static int lastId = 0;
 	private int id;
@@ -21,6 +21,7 @@ public abstract class Shape implements Cloneable {
 		point2 = new Point(p.x + 25, p.y + 25);
 		color = Color.BLACK;
 		strokeWidth = 2;
+		isSelected = false;
 		id = lastId;
 		lastId++;
 	}
@@ -50,11 +51,7 @@ public abstract class Shape implements Cloneable {
 	public abstract ShapeType getType();
 
 	public boolean isSelected() {
-		if (drawing != null) {
-			return drawing.getSelection().contains(this);
-		}
-
-		return false;
+		return isSelected;
 	}
 
 	public double getStrokeWidth() {
@@ -112,9 +109,9 @@ public abstract class Shape implements Cloneable {
 		return this.setPoint2(new Point(this.point2.x + m.x, this.point2.y + m.y));
 	}
 
-	public Shape setDrawing(VectorDrawing d) {
+	public Shape setSelected(boolean isSelected) {
 		Shape shape = clone();
-		shape.drawing = d;
+		shape.isSelected = isSelected;
 
 		return shape;
 	}
@@ -139,7 +136,6 @@ public abstract class Shape implements Cloneable {
 			clone.point2 = (Point) point2.clone();
 			clone.strokeWidth = strokeWidth;
 			clone.color = color;
-			clone.drawing = drawing;
 
             return clone;
         } catch (CloneNotSupportedException e) {

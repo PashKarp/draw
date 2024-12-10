@@ -119,6 +119,7 @@ public class DrawingController {
 
 	public void newDrawing() {
 		drawing = new VectorDrawing();
+		undoManager = new UndoManager();
 		if (gui != null) {
 			gui.updateDrawing();
 		}

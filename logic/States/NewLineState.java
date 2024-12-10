@@ -5,6 +5,7 @@ import logic.actions.AddAction;
 import logic.actions.DrawAction;
 import shapes.Line;
 import shapes.Shape;
+import shapes.ShapeType;
 
 import java.awt.Point;
 
@@ -17,7 +18,13 @@ public class NewLineState extends DrawingState {
 
     @Override
     public void processPress(Point p, boolean isAdditionalButtonPressed) {
-        newShape = new Line(p.x, p.y);
+        if (newShape != null) {
+            controller.getStateAdapter().constructionEnd(newShape);
+        }
+
+        newShape = controller.getDrawing().getShapePrototype(ShapeType.Line);
+        newShape = newShape.setPoint1(p);
+        newShape = newShape.setPoint2(p);
         newShape = newShape.setColor(controller.getColor());
 
         controller.getStateAdapter().constructionStart(newShape);

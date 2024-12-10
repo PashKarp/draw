@@ -19,15 +19,6 @@ public abstract class ShapeAdapter {
         }
     }
 
-    protected Point getSelectionIndicatorPoint1(Graphics g) {
-        return shape.getPosition();
-    }
-
-    protected Point getSelectionIndicatorPoint2(Graphics g) {
-        return new Point(shape.getPosition().x + shape.getSize().x, shape.getPosition().y
-                + shape.getSize().y);
-    }
-
     public void drawSelectionIndicator(Graphics g) {
 
         ((Graphics2D) g).setStroke(new BasicStroke((float) 1.0));
@@ -36,8 +27,9 @@ public abstract class ShapeAdapter {
         int len = 10;
         int off = 5;
 
-        Point p1 = getSelectionIndicatorPoint1(g);
-        Point p2 = getSelectionIndicatorPoint2(g);
+        Point p1 = shape.getPosition();
+        Point p2 = new Point(shape.getPosition().x + shape.getSize().x, shape.getPosition().y
+                + shape.getSize().y);
 
         g.drawPolyline(
                 // left up

@@ -6,6 +6,7 @@ import logic.actions.DrawAction;
 import shapes.Circle;
 import shapes.Line;
 import shapes.Shape;
+import shapes.ShapeType;
 
 import java.awt.*;
 
@@ -18,7 +19,14 @@ public class NewCircleState extends DrawingState {
 
     @Override
     public void processPress(Point p, boolean isAdditionalButtonPressed) {
-        newShape = new Circle(p.x, p.y, controller.getFill());
+        if (newShape != null) {
+            controller.getStateAdapter().constructionEnd(newShape);
+        }
+
+        newShape = controller.getDrawing().getShapePrototype(ShapeType.Circle);
+        newShape = newShape.setPoint1(p);
+        newShape = newShape.setPoint2(p);
+        newShape = ((Circle) newShape).setFilled(controller.getFill());
         newShape = newShape.setColor(controller.getColor());
 
         controller.getStateAdapter().constructionStart(newShape);

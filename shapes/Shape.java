@@ -143,6 +143,15 @@ public abstract class Shape implements Cloneable {
         }
     }
 
+	public Shape copy() {
+		Shape copy = clone();
+
+		id = lastId;
+		lastId++;
+
+		return copy;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Shape) {

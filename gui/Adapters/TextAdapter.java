@@ -1,6 +1,5 @@
 package gui.Adapters;
 
-import shapes.Shape;
 import shapes.Text;
 
 import java.awt.*;
@@ -8,25 +7,6 @@ import java.awt.*;
 public class TextAdapter extends ShapeAdapter {
     public TextAdapter(Text shape) {
         super(shape);
-    }
-
-    @Override
-    protected Point getSelectionIndicatorPoint1(Graphics g) {
-        g.setFont(((Text) shape).getFont());
-        int w = g.getFontMetrics().stringWidth(((Text) shape).getText());
-        Shape s = shape.setPoint2(new Point(shape.getPoint1().x + w, shape.getPoint1().y - ((Text) shape).getFont().getSize()));
-
-        return s.getPosition();
-    }
-
-    @Override
-    protected Point getSelectionIndicatorPoint2(Graphics g) {
-        g.setFont(((Text) shape).getFont());
-        int w = g.getFontMetrics().stringWidth(((Text) shape).getText());
-        Shape s = shape.setPoint2(new Point(shape.getPoint1().x + w, shape.getPoint1().y - ((Text) shape).getFont().getSize()));
-
-        return new Point(s.getPosition().x + s.getSize().x, s.getPosition().y
-                + s.getSize().y);
     }
 
     @Override

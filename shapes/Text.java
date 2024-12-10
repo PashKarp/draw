@@ -2,7 +2,7 @@ package shapes;
 
 import java.awt.*;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class Text extends Shape {
 
@@ -24,9 +24,12 @@ public class Text extends Shape {
 		super(new Point(x, y));
 		font = new Font(null, Font.PLAIN, fontSize);
 		text = JOptionPane.showInputDialog("Text to be inserted:");
+
 		if ((text == null) || (text.length() == 0)) {
 			throw new IllegalArgumentException("Empty text");
 		}
+
+		calculatePoint2();
 	}
 
 	/**
@@ -46,6 +49,7 @@ public class Text extends Shape {
 		font = new Font(null, Font.PLAIN, fontSize);
 		text = str;
 
+		calculatePoint2();
 	}
 
 	public String getText() {
@@ -54,6 +58,25 @@ public class Text extends Shape {
 
 	public Font getFont() {
 		return font;
+	}
+
+	public Text setFont(int fontSize) {
+		Text clone = clone();
+		clone.font = new Font(null, Font.PLAIN, fontSize);
+		clone.calculatePoint2();
+		return clone;
+	}
+
+	public Text setText(String text) {
+		Text clone = clone();
+		clone.text = text;
+		clone.calculatePoint2();
+		return clone;
+	}
+
+	private void calculatePoint2() {
+		int w = (int) (this.getFont().getSize() * text.length() * 0.54);
+		point2 = new Point(this.getPoint1().x + w, this.getPoint1().y - this.getFont().getSize());
 	}
 
 	@Override

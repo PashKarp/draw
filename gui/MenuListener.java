@@ -110,7 +110,7 @@ public class MenuListener implements ActionListener {
 
 			File f = fileDialog.getSelectedFile();
 			if (f != null) {
-				fio.export(f, controller, controller.getGui().getDrawingContainer());
+				fio.export(f, controller);
 			}
 
 		}

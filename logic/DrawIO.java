@@ -19,14 +19,8 @@ import shapes.*;
 
 public class DrawIO {
 
-	public void export(File f, DrawingController c, DrawGUI.DrawingContainer container) {
-		try {
-			c.getDrawing().emptySelection();
-			BufferedImage bi = container.getImage(); // retrieve image
-			ImageIO.write(bi, "png", f);
-		}
-		catch (IOException e) {
-		}
+	public void export(File f, DrawingController c) {
+		c.getStateAdapter().writeImgToFile(f);
 	}
 
 	public Point getPoint(String str) {
@@ -43,7 +37,7 @@ public class DrawIO {
 			BufferedReader in = new BufferedReader(new FileReader(f));
 			String str;
 
-			Point p = getPoint(in.readLine());
+			//Point p = getPoint(in.readLine());
 			c.newDrawing();
 
 			while ((str = in.readLine()) != null) {
@@ -63,25 +57,35 @@ public class DrawIO {
 					if (parts[0].equals("rect")) {
 						boolean fill = Integer.parseInt(parts[4].trim()) == 0 ? false
 								: true;
-						sh = new Rectangle(p1.x, p1.y, fill);
+
+						sh = c.getDrawing().getShapePrototype(ShapeType.Rectangle);
+
+						sh = ((Rectangle) sh).setFilled(fill);
 					}
 					else if (parts[0].equals("circ")) {
 						boolean fill = Integer.parseInt(parts[4].trim()) == 0 ? false
 								: true;
-						sh = new Circle(p1.x, p1.y, fill);
+
+						sh = c.getDrawing().getShapePrototype(ShapeType.Circle);
+
+						sh = ((Circle) sh).setFilled(fill);
 					}
 					else if (parts[0].equals("line")) {
-						sh = new Line(p1.x, p1.y);
+						sh = c.getDrawing().getShapePrototype(ShapeType.Line);
 					}
 					else if (parts[0].equals("text")) {
 						int fontSize = Integer.parseInt(parts[4].trim());
-						sh = new Text(p1.x, p1.y, fontSize, parts[5]);
+
+						sh = c.getDrawing().getShapePrototype(ShapeType.Text);
+						sh = ((Text) sh).setFont(fontSize);
+						sh = ((Text) sh).setText(parts[5]);
 					}
 					else {
 						throw new ArrayIndexOutOfBoundsException();
 					}
 
 					if (sh != null) {
+						sh = sh.setPoint1(p1);
 						sh = sh.setPoint2(p2);
 						sh = sh.setColor(new Color(Integer.parseInt(parts[3]
 										.trim())));

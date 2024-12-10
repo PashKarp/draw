@@ -2,8 +2,11 @@ package gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import gui.Adapters.AdapterFactory;
@@ -45,11 +48,15 @@ public class DrawGUI extends JFrame {
 			this.removeAll();
 			setBorder(BorderFactory.createLineBorder(Color.black));
 			setBackground(Color.WHITE);
-			mouse = new MouseListener(controller);
+
 			shapesAdapters.clear();
-			this.addMouseListener(mouse);
-			this.addMouseMotionListener(mouse);
 			setPreferredSize(new Dimension(500, 380));
+
+			if (mouse == null) {
+				mouse = new MouseListener(controller);
+				this.addMouseListener(mouse);
+				this.addMouseMotionListener(mouse);
+			}
 
 			d.addDrawingListener(new DrawingObserver());
 			pack();
@@ -97,21 +104,35 @@ public class DrawGUI extends JFrame {
 		@Override
 		public void constructionStart(Shape shape) {
 			appendShape(shape);
+			System.out.println("start");
 		}
 
 		@Override
 		public void constructionUpdate(Shape shape) {
 			updateShape(shape);
+			System.out.println("update");
 		}
 
 		@Override
 		public void constructionEnd(Shape shape) {
 			deleteShape(shape);
+			System.out.println("end");
 		}
 
 		@Override
 		public String getTextInput(String title) {
 			return JOptionPane.showInputDialog(title);
+		}
+
+		@Override
+		public void writeImgToFile(File file) {
+			try {
+				controller.getDrawing().emptySelection();
+				BufferedImage bi = this.getImage(); // retrieve image
+				ImageIO.write(bi, "png", file);
+			}
+			catch (IOException e) {
+			}
 		}
 
 		private class DrawingObserver implements DrawingListener {

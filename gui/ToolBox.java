@@ -26,10 +26,26 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import logic.DrawingController;
+import logic.DrawingControllerListener;
 import logic.Tool;
 
 public class ToolBox extends JToolBar implements ActionListener,
-		ChangeListener, ItemListener {
+		ChangeListener, ItemListener, DrawingControllerListener {
+
+	@Override
+	public void colorChanged(Color color) {
+		colorbutton.setBackground(this.c.getColor());
+	}
+
+	@Override
+	public void fillChanged(boolean fill) {
+		fillCheckBox.setSelected(this.c.getFill());
+	}
+
+	@Override
+	public void fontSizeChanged(int fontSize) {
+		fontSpinner.setValue(c.getFontSize());
+	}
 
 	class ColorDialog extends JDialog {
 		private static final long serialVersionUID = 0;
@@ -52,7 +68,6 @@ public class ToolBox extends JToolBar implements ActionListener,
 				public void actionPerformed(ActionEvent a) {
 					setVisible(false);
 					tb.setColor(colorChooser.getColor());
-					c.colorSelectedShapes(colorChooser.getColor());
 				}
 			});
 			cancelButton.addActionListener(new ActionListener() {
@@ -65,7 +80,6 @@ public class ToolBox extends JToolBar implements ActionListener,
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean fill;
 	private DrawingController c;
 	private ButtonGroup buttons;
 	private JToggleButton select;
@@ -79,13 +93,11 @@ public class ToolBox extends JToolBar implements ActionListener,
 	private JCheckBox fillCheckBox;
 	private JSpinner fontSpinner;
 
-	public Color color;
-
 	public ToolBox(DrawingController c) {
 		super("Tools", VERTICAL);
 		this.c = c;
 		// tool = Tool.LINE;
-		color = Color.BLACK;
+		this.c.setColor(Color.BLACK);
 
 		select = new JToggleButton(new ImageIcon("img/cursor.png"));
 		select.setToolTipText("Select and move shapes");
@@ -114,6 +126,7 @@ public class ToolBox extends JToolBar implements ActionListener,
 		fontSpinner.setMaximumSize(new Dimension(0, 20));
 		fontSpinner.setMinimumSize(new Dimension(0, 20));
 		fontSpinner.addChangeListener(this);
+		setFontSize(12);
 
 		select.addActionListener(this);
 		line.addActionListener(this);
@@ -155,6 +168,7 @@ public class ToolBox extends JToolBar implements ActionListener,
 		buttons.add(rectangle);
 		buttons.add(text);
 
+		c.addListener(this);
 	}
 
 	/**
@@ -194,15 +208,15 @@ public class ToolBox extends JToolBar implements ActionListener,
 	}
 
 	public Color getColor() {
-		return color;
+		return c.getColor();
 	}
 
 	public boolean getFill() {
-		return fill;
+		return c.getFill();
 	}
 
 	public int getFontSize() {
-		return (Integer) fontSpinner.getValue();
+		return c.getFontSize();
 	}
 
 	/**
@@ -211,34 +225,33 @@ public class ToolBox extends JToolBar implements ActionListener,
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.DESELECTED) {
-			fill = false;
+			c.setFill(false);
 		}
 		else {
-			fill = true;
+			c.setFill(true);
 		}
-
-		c.toggleFilled();
-
 	}
 
 	public void setColor(Color c) {
-		this.color = c;
-		colorbutton.setBackground(color);
+		this.c.setColor(c);
 	}
 
 	public void setFill(boolean f) {
-		fill = f;
-		fillCheckBox.setSelected(f);
+		this.c.setFill(f);
 	}
 
 	public void setFontSize(int size) {
-		fontSpinner.setValue(size);
+		c.setFontSize(size);
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent arg0) {
+	public void stateChanged(ChangeEvent e) {
 		// TODO Auto-generated method stub
+		Object source = e.getSource();
 
+		if (source.equals(fontSpinner)) {
+			setFontSize((Integer) ((JSpinner) source).getValue());
+		}
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import gui.Adapters.AdapterFactory;
 import gui.Adapters.ShapeAdapter;
+import logic.StateAdapter;
 import shapes.DrawingListener;
 import shapes.Shape;
 import shapes.VectorDrawing;
@@ -29,7 +30,7 @@ public class DrawGUI extends JFrame {
 	 * @author Alex Lagerstedt
 	 * 
 	 */
-	public class DrawingContainer extends JPanel {
+	public class DrawingContainer extends JPanel implements StateAdapter {
 
 		private static final long serialVersionUID = 0;
 
@@ -44,7 +45,7 @@ public class DrawGUI extends JFrame {
 			this.removeAll();
 			setBorder(BorderFactory.createLineBorder(Color.black));
 			setBackground(Color.WHITE);
-			mouse = new MouseListener(controller, tools);
+			mouse = new MouseListener(controller);
 			shapesAdapters.clear();
 			this.addMouseListener(mouse);
 			this.addMouseMotionListener(mouse);
@@ -71,52 +72,75 @@ public class DrawGUI extends JFrame {
 			return bi;
 		}
 
+		private void appendShape(Shape shape) {
+			ShapeAdapter adapter = AdapterFactory.create(shape);
+
+			shapesAdapters.add(adapter);
+			repaint();
+		}
+
+		private void updateShape(Shape shape) {
+			ShapeAdapter adapter = AdapterFactory.create(shape);
+
+			shapesAdapters.remove(adapter);
+			shapesAdapters.add(adapter);
+			repaint();
+		}
+
+		private void deleteShape(Shape shape) {
+			ShapeAdapter adapter = AdapterFactory.create(shape);
+
+			shapesAdapters.remove(adapter);
+			repaint();
+		}
+
+		@Override
+		public void constructionStart(Shape shape) {
+			appendShape(shape);
+		}
+
+		@Override
+		public void constructionUpdate(Shape shape) {
+			updateShape(shape);
+		}
+
+		@Override
+		public void constructionEnd(Shape shape) {
+			deleteShape(shape);
+		}
+
+		@Override
+		public String getTextInput(String title) {
+			return JOptionPane.showInputDialog(title);
+		}
+
 		private class DrawingObserver implements DrawingListener {
 
 			@Override
 			public void shapeAppended(Shape s) {
-				ShapeAdapter adapter = AdapterFactory.create(s);
-
-				shapesAdapters.add(adapter);
-				repaint();
+				appendShape(s);
 			}
 
 			@Override
 			public void shapeDeleted(Shape s) {
-				ShapeAdapter adapter = AdapterFactory.create(s);
-
-				shapesAdapters.remove(adapter);
-				repaint();
+				deleteShape(s);
 			}
 
 			@Override
 			public void shapeUpdated(Shape s) {
-				ShapeAdapter adapter = AdapterFactory.create(s);
-
-				shapesAdapters.remove(adapter);
-				shapesAdapters.add(adapter);
-				repaint();
+				updateShape(s);
 			}
 
 			@Override
 			public void shapeAppendedToSelection(Shape s) {
-				ShapeAdapter adapter = AdapterFactory.create(s);
-
-				shapesAdapters.remove(adapter);
-				shapesAdapters.add(adapter);
-				repaint();
+				updateShape(s);
 			}
 
 			@Override
 			public void selectionCleared(ArrayList<Shape> shapes) {
 				for (Shape s : shapes) {
-					ShapeAdapter adapter = AdapterFactory.create(s);
-
-					shapesAdapters.remove(adapter);
-					shapesAdapters.add(adapter);
+					updateShape(s);
 				}
-
-				repaint();
 			}
 		}
 	}
@@ -164,9 +188,9 @@ public class DrawGUI extends JFrame {
 		drawingContainer = new DrawingContainer();
 		scrollpane = new JScrollPane(drawingContainer);
 
-		controller = new DrawingController(this);
-		tools = new ToolBox(controller);
+		controller = new DrawingController(this, drawingContainer);
 		controller.newDrawing();
+		tools = new ToolBox(controller);
 
 		// statusBar = new StatusBar();
 

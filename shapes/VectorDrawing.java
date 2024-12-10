@@ -150,6 +150,14 @@ public class VectorDrawing implements Iterable<Shape> {
 		fireShapeAppendedToSelection(selectedShape);
 	}
 
+	public void addAllShapesToSelection() {
+		shapes = (ArrayList<Shape>) shapes.stream().map(s -> s.setSelected(true)).collect(Collectors.toList());
+
+		for (Shape shape : shapes) {
+			fireShapeAppendedToSelection(shape);
+		}
+	}
+
 	public void emptySelection() {
 		shapes = (ArrayList<Shape>) shapes.stream().map(s -> s.setSelected(false)).collect(Collectors.toList());
 

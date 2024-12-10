@@ -52,8 +52,7 @@ public class MenuListener implements ActionListener {
 		}
 
 		else if (cmd.equals("Select all")) {
-			controller.selectAll();
-
+			controller.getState().processSelectAll();
 		}
 
 		else if (cmd.equals("Clear selection")) {
@@ -61,7 +60,7 @@ public class MenuListener implements ActionListener {
 		}
 
 		else if (cmd.equals("Delete")) {
-			controller.deleteSelectedShapes();
+			controller.getState().processDelete();
 		}
 
 		else if (cmd.equals("Open")) {

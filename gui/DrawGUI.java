@@ -109,19 +109,16 @@ public class DrawGUI extends JFrame {
 		@Override
 		public void constructionStart(Shape shape) {
 			appendShape(shape);
-			System.out.println("start");
 		}
 
 		@Override
 		public void constructionUpdate(Shape shape) {
 			updateShape(shape);
-			System.out.println("update");
 		}
 
 		@Override
 		public void constructionEnd(Shape shape) {
 			deleteShape(shape);
-			System.out.println("end");
 		}
 
 		@Override

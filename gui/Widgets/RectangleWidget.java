@@ -1,13 +1,12 @@
-package gui.Adapters;
+package gui.Widgets;
 
-import shapes.FillableShape;
 import shapes.Rectangle;
 
 import java.awt.*;
 
-public class RectangleAdapter extends FillableShapeAdapter {
+public class RectangleWidget extends FillableShapeWidget {
 
-    public RectangleAdapter(Rectangle shape) {
+    public RectangleWidget(Rectangle shape) {
         super(shape);
     }
 

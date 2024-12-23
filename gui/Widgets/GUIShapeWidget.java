@@ -1,14 +1,13 @@
-package gui.Adapters;
+package gui.Widgets;
 
 import shapes.Shape;
+import shapes.ShapeWidget;
 
 import java.awt.*;
 
-public abstract class ShapeAdapter {
-    protected Shape shape;
-
-    public ShapeAdapter(Shape shape) {
-        this.shape = shape;
+public abstract class GUIShapeWidget extends ShapeWidget {
+    public GUIShapeWidget(Shape shape) {
+        super(shape);
     }
 
     public void draw(Graphics g) {
@@ -57,8 +56,8 @@ public abstract class ShapeAdapter {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ShapeAdapter) {
-            return ((ShapeAdapter) obj).shape.equals(shape);
+        if (obj instanceof GUIShapeWidget) {
+            return ((GUIShapeWidget) obj).shape.equals(shape);
         }
         
         return false;

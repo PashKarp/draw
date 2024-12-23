@@ -1,12 +1,11 @@
-package gui.Adapters;
+package gui.Widgets;
 
 import shapes.FillableShape;
-import shapes.Shape;
 
 import java.awt.*;
 
-public abstract class FillableShapeAdapter extends ShapeAdapter {
-    public FillableShapeAdapter(FillableShape shape) {
+public abstract class FillableShapeWidget extends GUIShapeWidget {
+    public FillableShapeWidget(FillableShape shape) {
         super(shape);
     }
 

@@ -1,11 +1,11 @@
-package gui.Adapters;
+package gui.Widgets;
 
 import shapes.Circle;
 
 import java.awt.*;
 
-public class CircleAdapter extends FillableShapeAdapter {
-    public CircleAdapter(Circle shape) {
+public class CircleWidget extends FillableShapeWidget {
+    public CircleWidget(Circle shape) {
         super(shape);
     }
 

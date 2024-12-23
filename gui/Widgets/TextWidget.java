@@ -1,11 +1,11 @@
-package gui.Adapters;
+package gui.Widgets;
 
 import shapes.Text;
 
 import java.awt.*;
 
-public class TextAdapter extends ShapeAdapter {
-    public TextAdapter(Text shape) {
+public class TextWidget extends GUIShapeWidget {
+    public TextWidget(Text shape) {
         super(shape);
     }
 

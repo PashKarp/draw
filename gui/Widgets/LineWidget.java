@@ -1,11 +1,11 @@
-package gui.Adapters;
+package gui.Widgets;
 
 import shapes.Line;
 
 import java.awt.*;
 
-public class LineAdapter extends ShapeAdapter {
-    public LineAdapter(Line shape) {
+public class LineWidget extends GUIShapeWidget {
+    public LineWidget(Line shape) {
         super(shape);
     }
 

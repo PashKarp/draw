@@ -10,12 +10,13 @@ import shapes.VectorDrawing;
  * MoveAction implements a single undoable action where all the Shapes in a
  * given Selection are moved.
  */
-public class MoveAction extends MoveUpdatableAction {
+public class MoveAction implements MergeableAction {
 
 	ImmutableSelection selected;
 	Point movement;
 
 	VectorDrawing d;
+	boolean isEnd;
 
 	/**
 	 * Creates a MoveAction that moves all Shapes in the given Selection in the
@@ -28,10 +29,11 @@ public class MoveAction extends MoveUpdatableAction {
 	 *            the amount the shapes should be moved, relative to the
 	 *            original position
 	 */
-	public MoveAction(ImmutableSelection s, Point m, VectorDrawing d) {
+	public MoveAction(ImmutableSelection s, Point m, VectorDrawing d, boolean isEnd) {
 		this.selected = s;
 		this.movement = m;
 		this.d = d;
+		this.isEnd = isEnd;
 	}
 
 	public void execute() {
@@ -56,8 +58,27 @@ public class MoveAction extends MoveUpdatableAction {
 		}
 	}
 
-	public MoveAction moveUpdate(Point m) {
-		Point newPoint = new Point(this.movement.x + m.x, this.movement.y + m.y);
-		return new MoveAction(this.selected, newPoint, d);
+	@Override
+	public boolean canMerge(MergeableAction action) {
+		return action instanceof MoveAction &&
+				! this.isEnd &&
+				this.selected.equals(((MoveAction) action).selected) &&
+				this.d.equals(((MoveAction) action).d);
+	}
+
+	@Override
+	public MergeableAction merge(MergeableAction action) {
+		if (action instanceof MoveAction &&
+				! this.isEnd &&
+				this.selected.equals(((MoveAction) action).selected) &&
+				this.d.equals(((MoveAction) action).d)) {
+			Point movement = ((MoveAction) action).movement;
+
+			Point actualMovement = new Point(this.movement.x + movement.x, this.movement.y + movement.y);
+
+			return new MoveAction(this.selected, actualMovement, this.d, ((MoveAction) action).isEnd);
+		}
+
+		return this;
 	}
 }

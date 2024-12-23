@@ -56,4 +56,24 @@ public class Selection implements ImmutableSelection {
 		str += "\n";
 		return str;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Selection && this.nShapes() == ((Selection) obj).nShapes()) {
+			boolean res = true;
+			Selection selection = (Selection) obj;
+
+			for (Shape s : this) {
+				res = res && selection.contains(s);
+			}
+
+			for (Shape s : selection) {
+				res = res && this.contains(s);
+			}
+
+			return res;
+		}
+
+		return false;
+	}
 }

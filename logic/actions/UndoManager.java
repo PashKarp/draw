@@ -43,8 +43,14 @@ public class UndoManager {
 		this.redoStack.clear();
 
 		if (lastAction != null) {
-			this.undoStack.push(lastAction);
-			lastAction = action;
+			if (action instanceof MergeableAction &&
+					lastAction instanceof MergeableAction &&
+					((MergeableAction) lastAction).canMerge((MergeableAction) action)) {
+				lastAction = ((MergeableAction) lastAction).merge((MergeableAction) action);
+			} else {
+				this.undoStack.push(lastAction);
+				lastAction = action;
+			}
 		} else {
 			lastAction = action;
 		}
@@ -94,15 +100,5 @@ public class UndoManager {
 		}
 		action.undo();
 		this.redoStack.push(action);
-	}
-
-	public void updateMoveUpdatableAction(Point m) {
-		if (lastAction instanceof MoveUpdatableAction) {
-			lastAction.undo();
-			lastAction = ((MoveUpdatableAction) lastAction).moveUpdate(m);
-			lastAction.execute();
-		} else {
-//			throw new IllegalStateException();
-		}
 	}
 }

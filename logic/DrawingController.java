@@ -115,10 +115,6 @@ public class DrawingController {
 		return stateAdapter;
 	}
 
-	public void updateUpdatableAction(Point movement) {
-		undoManager.updateMoveUpdatableAction(movement);
-	}
-
 	public void newDrawing() {
 		drawing = new VectorDrawing();
 		undoManager = new UndoManager();

@@ -9,7 +9,7 @@ import java.awt.*;
  * AddAction implements a single undoable action where a Shape is added to a
  * Drawing.
  */
-public class AddAction extends MoveUpdatableAction {
+public class AddAction implements DrawAction {
 
 	VectorDrawing d;
 	Shape s;
@@ -41,10 +41,5 @@ public class AddAction extends MoveUpdatableAction {
 
 	public void undo() {
 		d.removeShape(s);
-	}
-
-	public AddAction moveUpdate(Point m) {
-		s = s.updatePoint2(m);
-		return this;
 	}
 }

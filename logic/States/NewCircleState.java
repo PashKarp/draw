@@ -4,9 +4,7 @@ import logic.DrawingController;
 import logic.actions.AddAction;
 import logic.actions.DrawAction;
 import shapes.Circle;
-import shapes.Line;
 import shapes.Shape;
-import shapes.ShapeType;
 
 import java.awt.*;
 
@@ -23,11 +21,7 @@ public class NewCircleState extends DrawingState {
             controller.getStateAdapter().constructionEnd(newShape);
         }
 
-        newShape = controller.getDrawing().getShapePrototype(ShapeType.Circle);
-        newShape = newShape.setPoint1(p);
-        newShape = newShape.setPoint2(p);
-        newShape = ((Circle) newShape).setFilled(controller.getFill());
-        newShape = newShape.setColor(controller.getColor());
+        newShape = new Circle(p, p, controller.getFill(), controller.getColor());
 
         controller.getStateAdapter().constructionStart(newShape);
     }

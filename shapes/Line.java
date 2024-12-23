@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class Line extends Shape {
 
-	public Line(int x, int y) {
-		super(new Point(x, y));
+	public Line(Point p1, Point p2, Color color) {
+		super(p1, p2, color);
 	}
 
 	@Override

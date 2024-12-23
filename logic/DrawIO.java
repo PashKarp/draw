@@ -42,7 +42,6 @@ public class DrawIO {
 			BufferedReader in = new BufferedReader(new FileReader(f));
 			String str;
 
-			//Point p = getPoint(in.readLine());
 			controller.newDrawing();
 
 			while ((str = in.readLine()) != null) {
@@ -57,43 +56,34 @@ public class DrawIO {
 					Point p1 = getPoint(parts[1]);
 					Point p2 = getPoint(parts[2]);
 					Shape sh = null;
+					Color color = new Color(Integer.parseInt(parts[3].trim()));
 					parts[0] = parts[0].trim();
 
 					if (parts[0].equals("rect")) {
 						boolean fill = Integer.parseInt(parts[4].trim()) == 0 ? false
 								: true;
 
-						sh = controller.getDrawing().getShapePrototype(ShapeType.Rectangle);
-
-						sh = ((Rectangle) sh).setFilled(fill);
+						sh = new Rectangle(p1, p2, fill, color);
 					}
 					else if (parts[0].equals("circ")) {
 						boolean fill = Integer.parseInt(parts[4].trim()) == 0 ? false
 								: true;
 
-						sh = controller.getDrawing().getShapePrototype(ShapeType.Circle);
-
-						sh = ((Circle) sh).setFilled(fill);
+						sh = new Circle(p1, p2, fill, color);
 					}
 					else if (parts[0].equals("line")) {
-						sh = controller.getDrawing().getShapePrototype(ShapeType.Line);
+						sh = new Line(p1, p2, color);
 					}
 					else if (parts[0].equals("text")) {
 						int fontSize = Integer.parseInt(parts[4].trim());
 
-						sh = controller.getDrawing().getShapePrototype(ShapeType.Text);
-						sh = ((Text) sh).setFont(fontSize);
-						sh = ((Text) sh).setText(parts[5]);
+						sh = new Text(p1, fontSize, parts[5], color);
 					}
 					else {
 						throw new ArrayIndexOutOfBoundsException();
 					}
 
 					if (sh != null) {
-						sh = sh.setPoint1(p1);
-						sh = sh.setPoint2(p2);
-						sh = sh.setColor(new Color(Integer.parseInt(parts[3]
-										.trim())));
 						controller.getDrawing().insertShape(sh);
 					}
 				}

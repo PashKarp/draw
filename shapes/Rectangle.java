@@ -4,9 +4,8 @@ import java.awt.*;
 
 public class Rectangle extends FillableShape {
 
-	public Rectangle(int x, int y, boolean filled) {
-		super(x, y);
-		this.filled = filled;
+	public Rectangle(Point p1, Point p2, boolean filled, Color color) {
+		super(p1, p2, color, filled);
 	}
 
 	@Override

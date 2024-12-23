@@ -6,9 +6,9 @@ public abstract class FillableShape extends Shape {
 
 	protected boolean filled;
 
-	public FillableShape(int xpos, int ypos) {
-		super(new Point(xpos, ypos));
-		filled = false;
+	public FillableShape(Point p1, Point p2, Color color, boolean isFilled) {
+		super(p1, p2, color);
+		filled = isFilled;
 	}
 
 	public boolean getFilled() {

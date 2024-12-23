@@ -20,8 +20,8 @@ public class Text extends Shape {
 	 * @param fontSize
 	 *            font size
 	 */
-	public Text(int x, int y, int fontSize) {
-		super(new Point(x, y));
+	public Text(Point p, int fontSize, Color color) {
+		super(p, p, color);
 		font = new Font(null, Font.PLAIN, fontSize);
 		text = JOptionPane.showInputDialog("Text to be inserted:");
 
@@ -44,8 +44,8 @@ public class Text extends Shape {
 	 * @param str
 	 *            the text for the shape
 	 */
-	public Text(int x, int y, int fontSize, String str) {
-		super(new Point(x, y));
+	public Text(Point p, int fontSize, String str, Color color) {
+		super(p, p, color);
 		font = new Font(null, Font.PLAIN, fontSize);
 		text = str;
 

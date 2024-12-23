@@ -21,18 +21,9 @@ public class VectorDrawing implements Iterable<Shape> {
 
 	private ArrayList<DrawingListener> listeners;
 
-	private HashMap<ShapeType, Shape> prototypes;
-
 	public VectorDrawing() {
 		shapes = new ArrayList<Shape>();
 		listeners = new ArrayList<DrawingListener>();
-
-		prototypes = new HashMap<ShapeType, Shape>();
-
-		prototypes.put(ShapeType.Text, new Text(0, 0, 12, "test"));
-		prototypes.put(ShapeType.Rectangle, new Rectangle(0, 0, false));
-		prototypes.put(ShapeType.Circle, new Circle(0, 0, false));
-		prototypes.put(ShapeType.Line, new Line(0, 0));
 	}
 
 	public Shape getShapeAt(Point p) {
@@ -60,10 +51,6 @@ public class VectorDrawing implements Iterable<Shape> {
 		}
 
 		return null;
-	}
-
-	public Shape getShapePrototype(ShapeType type) {
-		return prototypes.get(type).copy();
 	}
 
 	public void colorShape(Shape s, Color color) {

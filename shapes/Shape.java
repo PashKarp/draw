@@ -16,10 +16,10 @@ public abstract class Shape implements Cloneable {
 	private static int lastId = 0;
 	private int id;
 
-	public Shape(Point p) {
-		point1 = p;
-		point2 = new Point(p.x + 25, p.y + 25);
-		color = Color.BLACK;
+	public Shape(Point p1, Point p2, Color color) {
+		point1 = p1;
+		point2 = p2;
+		this.color = color;
 		strokeWidth = 2;
 		isSelected = false;
 		id = lastId;

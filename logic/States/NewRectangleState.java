@@ -3,10 +3,8 @@ package logic.States;
 import logic.DrawingController;
 import logic.actions.AddAction;
 import logic.actions.DrawAction;
-import shapes.Circle;
 import shapes.Rectangle;
 import shapes.Shape;
-import shapes.ShapeType;
 
 import java.awt.*;
 
@@ -23,11 +21,7 @@ public class NewRectangleState extends DrawingState {
             controller.getStateAdapter().constructionEnd(newShape);
         }
 
-        newShape = controller.getDrawing().getShapePrototype(ShapeType.Rectangle);
-        newShape = newShape.setPoint1(p);
-        newShape = newShape.setPoint2(p);
-        newShape = ((Rectangle) newShape).setFilled(controller.getFill());
-        newShape = newShape.setColor(controller.getColor());
+        newShape = new Rectangle(p, p, controller.getFill(), controller.getColor());
 
         controller.getStateAdapter().constructionStart(newShape);
     }

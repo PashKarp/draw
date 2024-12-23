@@ -10,9 +10,8 @@ import shapes.VectorDrawing;
  * MoveAction implements a single undoable action where all the Shapes in a
  * given Selection are moved.
  */
-public class MoveAction implements MergeableAction {
+public class MoveAction extends GroupAction implements MergeableAction {
 
-	ImmutableSelection selected;
 	Point movement;
 
 	VectorDrawing d;
@@ -30,35 +29,29 @@ public class MoveAction implements MergeableAction {
 	 *            original position
 	 */
 	public MoveAction(ImmutableSelection s, Point m, VectorDrawing d, boolean isEnd) {
-		this.selected = s;
+		super(s);
+
 		this.movement = m;
 		this.d = d;
 		this.isEnd = isEnd;
 	}
 
-	public void execute() {
-		for (Shape s : selected) {
-			d.moveShape(s, movement);
-		}
+	@Override
+	protected void executeForShape(Shape s) {
+		d.moveShape(s, movement);
+	}
+
+	@Override
+	protected void undoForShape(Shape s) {
+		Point reverseMovement = new Point(-movement.x, -movement.y);
+
+		d.moveShape(s, reverseMovement);
 	}
 
 	public String getDescription() {
 		return null;
 	}
 
-	public void redo() {
-		execute();
-	}
-
-	public void undo() {
-		Point reverseMovement = new Point(-movement.x, -movement.y);
-
-		for (Shape s : selected) {
-			d.moveShape(s, reverseMovement);
-		}
-	}
-
-	@Override
 	public boolean canMerge(MergeableAction action) {
 		return action instanceof MoveAction &&
 				! this.isEnd &&

@@ -8,12 +8,9 @@ import shapes.Shape;
  * DeleteAction implements a single undoable action where all Shapes in a given
  * Selection are added to a Drawing.
  */
-public class DeleteAction implements DrawAction {
+public class DeleteAction extends GroupAction {
 
 	VectorDrawing d;
-	ImmutableSelection selection;
-
-	int position;
 
 	/**
 	 * Creates an DeleteAction that removes all shapes in the given Selection
@@ -25,28 +22,22 @@ public class DeleteAction implements DrawAction {
 	 *            the shape to be added.
 	 */
 	public DeleteAction(VectorDrawing drawing, ImmutableSelection selection) {
-		this.selection = selection;
+		super(selection);
 		this.d = drawing;
 	}
 
-	public void execute() {
-		for (Shape s : selection) {
-			d.removeShape(s);
-		}
+	@Override
+	protected void executeForShape(Shape s) {
+		d.removeShape(s);
+	}
+
+	@Override
+	protected void undoForShape(Shape s) {
+		d.insertShape(s);
 	}
 
 	public String getDescription() {
 		return null;
-	}
-
-	public void redo() {
-		execute();
-	}
-
-	public void undo() {
-		for (Shape s : selection) {
-			d.insertShape(s);
-		}
 	}
 
 }

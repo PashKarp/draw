@@ -8,9 +8,8 @@ import shapes.VectorDrawing;
  * FillAction implements a undoable action where the fill status of all the
  * Shapes in a given Selection are toggled.
  */
-public class FillAction implements DrawAction {
+public class FillAction extends GroupAction {
 
-	ImmutableSelection selected;
 	VectorDrawing d;
 
 	/**
@@ -21,26 +20,22 @@ public class FillAction implements DrawAction {
 	 *            a selection which contains the shapes to be modified
 	 */
 	public FillAction(ImmutableSelection s, VectorDrawing d) {
-		this.selected = s;
+		super(s);
+
 		this.d = d;
 	}
 
-	public void execute() {
-		for (Shape s : selected) {
-			d.fillShape(s);
-		}
+	@Override
+	protected void executeForShape(Shape s) {
+		d.fillShape(s);
+	}
+
+	@Override
+	protected void undoForShape(Shape s) {
+		d.fillShape(s);
 	}
 
 	public String getDescription() {
 		return null;
 	}
-
-	public void redo() {
-		execute();
-	}
-
-	public void undo() {
-		execute();
-	}
-
 }

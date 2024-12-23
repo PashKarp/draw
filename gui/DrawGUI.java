@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import gui.Adapters.AdapterFactory;
-import gui.Adapters.ShapeAdapter;
+import gui.Widgets.WidgetFactory;
+import gui.Widgets.GUIShapeWidget;
 import logic.StateAdapter;
 import shapes.DrawingListener;
 import shapes.Shape;
@@ -37,11 +39,14 @@ public class DrawGUI extends JFrame {
 
 		private static final long serialVersionUID = 0;
 
-		private ArrayList<ShapeAdapter> shapesAdapters;
+		private ArrayList<GUIShapeWidget> shapesAdapters;
+
+		private WidgetFactory factory;
 
 		public DrawingContainer() {
 			super(new GridBagLayout());
-			shapesAdapters = new ArrayList<ShapeAdapter>();
+			shapesAdapters = new ArrayList<GUIShapeWidget>();
+			factory = new WidgetFactory();
 		}
 
 		public void setDrawing(VectorDrawing d) {
@@ -65,7 +70,7 @@ public class DrawGUI extends JFrame {
 		public void paintComponent(Graphics g) {
 
 			super.paintComponent(g);
-			for (ShapeAdapter s : shapesAdapters) {
+			for (GUIShapeWidget s : shapesAdapters) {
 				s.draw(g);
 			}
 		}
@@ -80,14 +85,14 @@ public class DrawGUI extends JFrame {
 		}
 
 		private void appendShape(Shape shape) {
-			ShapeAdapter adapter = AdapterFactory.create(shape);
+			GUIShapeWidget adapter = factory.create(shape);
 
 			shapesAdapters.add(adapter);
 			repaint();
 		}
 
 		private void updateShape(Shape shape) {
-			ShapeAdapter adapter = AdapterFactory.create(shape);
+			GUIShapeWidget adapter = factory.create(shape);
 
 			shapesAdapters.remove(adapter);
 			shapesAdapters.add(adapter);
@@ -95,7 +100,7 @@ public class DrawGUI extends JFrame {
 		}
 
 		private void deleteShape(Shape shape) {
-			ShapeAdapter adapter = AdapterFactory.create(shape);
+			GUIShapeWidget adapter = factory.create(shape);
 
 			shapesAdapters.remove(adapter);
 			repaint();
@@ -133,6 +138,49 @@ public class DrawGUI extends JFrame {
 			}
 			catch (IOException e) {
 			}
+		}
+
+		@Override
+		public File getFileToOpen(String description, String extensions) {
+			JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			FileFilter filter = new FileNameExtensionFilter(description, extensions);
+			fileDialog.addChoosableFileFilter(filter);
+			fileDialog.setFileFilter(filter);
+
+			fileDialog.showOpenDialog(null);
+
+			return fileDialog.getSelectedFile();
+		}
+
+		@Override
+		public File getFileToWrite(String description, String extensions) {
+			JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			FileFilter filter = new FileNameExtensionFilter(description, extensions);
+			fileDialog.addChoosableFileFilter(filter);
+			fileDialog.setFileFilter(filter);
+
+			fileDialog.showSaveDialog(null);
+
+			return fileDialog.getSelectedFile();
+		}
+
+		@Override
+		public boolean getChoose(String title, String description) {
+			return JOptionPane.showConfirmDialog(
+					null,
+					description,
+					title,
+					JOptionPane.YES_NO_OPTION
+			) == JOptionPane.YES_OPTION;
+		}
+
+		@Override
+		public Dimension getDrawingSize() {
+			MainMenu.NewDrawingDialog diag = new MainMenu.NewDrawingDialog();
+			return diag.getNewSize();
 		}
 
 		private class DrawingObserver implements DrawingListener {

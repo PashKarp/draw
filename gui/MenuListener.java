@@ -25,7 +25,6 @@ import logic.DrawingController;
 public class MenuListener implements ActionListener {
 
 	DrawingController controller;
-	JFileChooser fileDialog;
 
 	public MenuListener(DrawingController c) {
 		this.controller = c;
@@ -33,14 +32,13 @@ public class MenuListener implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		DrawIO fio = new DrawIO();
 
 		if (cmd.equals("Quit")) {
 			System.exit(0);
 		}
 
 		else if (cmd.equals("Save")) {
-			controller.getDrawing().listShapes();
+			controller.save();
 		}
 
 		else if (cmd.equals("Undo")) {
@@ -64,63 +62,19 @@ public class MenuListener implements ActionListener {
 		}
 
 		else if (cmd.equals("Open")) {
-			fileDialog = new JFileChooser();
-			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			FileFilter filter = new FileNameExtensionFilter("Draw files",
-					"draw");
-			fileDialog.addChoosableFileFilter(filter);
-			fileDialog.setFileFilter(filter);
-
-			fileDialog.showOpenDialog(null);
-			File f = fileDialog.getSelectedFile();
-			if (f != null) {
-				fio.open(f, controller);
-			}
-
+			controller.open();
 		}
 
 		else if (cmd.equals("Save as")) {
-			fileDialog = new JFileChooser();
-			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-			fileDialog.setSelectedFile(new File("new.draw"));
-			FileFilter filter = new FileNameExtensionFilter("Draw files",
-					"draw");
-			fileDialog.addChoosableFileFilter(filter);
-			fileDialog.setFileFilter(filter);
-
-			fileDialog.showSaveDialog(null);
-
-			File f = fileDialog.getSelectedFile();
-			if (f != null) {
-				fio.save(f, controller);
-			}
+			controller.saveAs();
 		}
 
 		else if (cmd.equals("Export PNG")) {
-			fileDialog = new JFileChooser();
-			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fileDialog.setDialogType(JFileChooser.CUSTOM_DIALOG);
-			FileFilter filter = new FileNameExtensionFilter(
-					"Portable Network Graphics", "png");
-			fileDialog.addChoosableFileFilter(filter);
-
-			fileDialog.setSelectedFile(new File("out.png"));
-			fileDialog.showSaveDialog(null);
-
-			File f = fileDialog.getSelectedFile();
-			if (f != null) {
-				fio.export(f, controller);
-			}
-
+			controller.exportPNG();
 		}
 
 		else if (cmd.equals("New")) {
-			NewDrawingDialog diag = new NewDrawingDialog();
-			Dimension size = diag.getNewSize();
-			if (size != null) {
-				controller.newDrawing();
-			}
+			controller.createNew();
 		}
 
 		else {

@@ -2,15 +2,14 @@ package logic;
 
 import gui.DrawGUI;
 
-import java.awt.Color;
-import java.awt.Point;
+import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import logic.States.*;
 import logic.actions.DrawAction;
 import shapes.ImmutableSelection;
-import shapes.Shape;
 import shapes.VectorDrawing;
 import logic.actions.UndoManager;
 
@@ -31,12 +30,15 @@ public class DrawingController {
 
 	private HashMap<Tool, DrawingState> states;
 
+	private DrawIO drawIO;
+
 	public DrawingController(DrawGUI g, StateAdapter adapter) {
 		drawing = null;
 		undoManager = new UndoManager();
 		gui = g;
 		tool = Tool.LINE;
 		stateAdapter = adapter;
+		drawIO = new DrawIO(this);
 
 		states = new HashMap<Tool, DrawingState>();
 
@@ -135,6 +137,47 @@ public class DrawingController {
 		this.tool = t;
 	}
 
+	public void save() {
+		getDrawing().listShapes();
+	}
+
+	public void saveAs() {
+		File file = stateAdapter.getFileToWrite("Draw files", "draw");
+
+		if (file != null) {
+			drawIO.save(file);
+		}
+	}
+
+	public void open() {
+		File file = stateAdapter.getFileToOpen("Draw files", "draw");
+
+		if (file != null) {
+			drawIO.open(file);
+		}
+	}
+
+	public void exportPNG() {
+		File file = stateAdapter.getFileToWrite("Portable Network Graphics", "png");
+
+		if (file != null) {
+			drawIO.export(file);
+		}
+	}
+
+	public void createNew() {
+		boolean createChosen = true;
+		if (drawing.nShapes() > 0) {
+			createChosen = stateAdapter.getChoose("Are you sure?", "Are you sure you want to delete your current drawing?");
+		}
+
+		if (createChosen) {
+			Dimension size = stateAdapter.getDrawingSize();
+			if (size != null) {
+				newDrawing();
+			}
+		}
+	}
 
 	public void undo() {
 		if (this.undoManager.canUndo()) {

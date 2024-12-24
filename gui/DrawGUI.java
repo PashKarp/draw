@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import gui.Widgets.WidgetFactory;
 import gui.Widgets.GUIShapeWidget;
 import logic.StateAdapter;
+import logic.StateListener;
 import shapes.DrawingListener;
 import shapes.Shape;
 import shapes.VectorDrawing;
@@ -35,7 +36,7 @@ public class DrawGUI extends JFrame {
 	 * @author Alex Lagerstedt
 	 * 
 	 */
-	public class DrawingContainer extends JPanel implements StateAdapter {
+	public class DrawingContainer extends JPanel implements StateAdapter, StateListener {
 
 		private static final long serialVersionUID = 0;
 
@@ -255,6 +256,7 @@ public class DrawGUI extends JFrame {
 		scrollpane = new JScrollPane(drawingContainer);
 
 		controller = new DrawingController(this, drawingContainer);
+		controller.addStateListener(drawingContainer);
 		controller.newDrawing();
 		tools = new ToolBox(controller);
 

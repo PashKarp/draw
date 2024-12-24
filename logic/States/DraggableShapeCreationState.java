@@ -3,7 +3,6 @@ package logic.States;
 import logic.DrawingController;
 import logic.actions.AddAction;
 import logic.actions.DrawAction;
-import shapes.Line;
 import shapes.Shape;
 
 import java.awt.*;
@@ -20,12 +19,12 @@ public abstract class DraggableShapeCreationState extends DrawingState {
     @Override
     public void processPress(Point p, boolean isAdditionalButtonPressed) {
         if (newShape != null) {
-            controller.getStateAdapter().constructionEnd(newShape);
+            controller.fireConstructionEnd(newShape);
         }
 
         newShape = createShape(p);
 
-        controller.getStateAdapter().constructionStart(newShape);
+        controller.fireConstructionStart(newShape);
     }
 
     @Override
@@ -34,14 +33,14 @@ public abstract class DraggableShapeCreationState extends DrawingState {
             Point newPoint2 = new Point(newShape.getPoint2().x + difX, newShape.getPoint2().y + difY);
             newShape = newShape.setPoint2(newPoint2);
 
-            controller.getStateAdapter().constructionUpdate(newShape);
+            controller.fireConstructionUpdate(newShape);
         }
     }
 
     @Override
     public void processRelease() {
         if (newShape != null) {
-            controller.getStateAdapter().constructionEnd(newShape);
+            controller.fireConstructionEnd(newShape);
 
             DrawAction add = new AddAction(controller.getDrawing(), newShape);
             controller.addAction(add);
@@ -52,7 +51,7 @@ public abstract class DraggableShapeCreationState extends DrawingState {
     @Override
     public void processStateChange() {
         if (newShape != null) {
-            controller.getStateAdapter().constructionEnd(newShape);
+            controller.fireConstructionEnd(newShape);
             newShape = null;
         }
     }

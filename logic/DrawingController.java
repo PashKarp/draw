@@ -10,6 +10,7 @@ import java.util.HashMap;
 import logic.States.*;
 import logic.actions.DrawAction;
 import shapes.ImmutableSelection;
+import shapes.Shape;
 import shapes.VectorDrawing;
 import logic.actions.UndoManager;
 
@@ -25,7 +26,8 @@ public class DrawingController {
 	private Color color;
 	private int fontSize;
 
-	private ArrayList<DrawingControllerListener> listeners;
+	private ArrayList<DrawingControllerListener> controllerListeners;
+	private ArrayList<StateListener> stateListeners;
 	private StateAdapter stateAdapter;
 
 	private HashMap<Tool, DrawingState> states;
@@ -49,7 +51,8 @@ public class DrawingController {
 		states.put(Tool.SQUARE, new NewRectangleState(this));
 		states.put(Tool.TEXT, new NewTextState(this));
 
-		listeners = new ArrayList<DrawingControllerListener>();
+		controllerListeners = new ArrayList<DrawingControllerListener>();
+		stateListeners = new ArrayList<StateListener>();
 	}
 
 	public VectorDrawing getDrawing() {
@@ -182,30 +185,58 @@ public class DrawingController {
 	}
 
 	public void addListener(DrawingControllerListener listener) {
-		if (! listeners.contains(listener)) {
-			listeners.add(listener);
+		if (! controllerListeners.contains(listener)) {
+			controllerListeners.add(listener);
 		}
 	}
 
 	public void removeListener(DrawingControllerListener listener) {
-		listeners.remove(listener);
+		controllerListeners.remove(listener);
 	}
 
 	private void fireColorChanged(Color color) {
-		for (DrawingControllerListener listener : listeners) {
+		for (DrawingControllerListener listener : controllerListeners) {
 			listener.colorChanged(color);
 		}
 	}
 
 	private void fireFillChanged(boolean fill) {
-		for (DrawingControllerListener listener : listeners) {
+		for (DrawingControllerListener listener : controllerListeners) {
 			listener.fillChanged(fill);
 		}
 	}
 
 	private void fireFontSizeChanged(int fontSize) {
-		for (DrawingControllerListener listener : listeners) {
+		for (DrawingControllerListener listener : controllerListeners) {
 			listener.fontSizeChanged(fontSize);
+		}
+	}
+
+	public void addStateListener(StateListener listener) {
+		if (! stateListeners.contains(listener)) {
+			stateListeners.add(listener);
+		}
+	}
+
+	public void removeStateListener(StateListener listener) {
+		stateListeners.remove(listener);
+	}
+
+	public void fireConstructionStart(Shape s) {
+		for (StateListener listener : stateListeners) {
+			listener.constructionStart(s);
+		}
+	}
+
+	public void fireConstructionUpdate(Shape s) {
+		for (StateListener listener : stateListeners) {
+			listener.constructionUpdate(s);
+		}
+	}
+
+	public void fireConstructionEnd(Shape s) {
+		for (StateListener listener : stateListeners) {
+			listener.constructionEnd(s);
 		}
 	}
 }

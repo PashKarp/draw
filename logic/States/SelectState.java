@@ -13,9 +13,12 @@ public class SelectState extends DrawingState {
         super(c);
     }
 
+    boolean isMoveStart = false;
+
     @Override
     public void processPress(Point p, boolean isAdditionalButtonPressed) {
         Shape tmp = controller.getDrawing().getShapeAt(p);
+        isMoveStart = false;
 
         if (!isAdditionalButtonPressed
                 && !controller.getSelection().contains(tmp)) {
@@ -44,6 +47,7 @@ public class SelectState extends DrawingState {
 
         if (!controller.getSelection().isEmpty()) {
             MoveAction action = new MoveAction(controller.getDrawing().getSelection(), delta, controller.getDrawing(), false);
+            isMoveStart = true;
 
             controller.addAction(action);
         }
@@ -51,7 +55,7 @@ public class SelectState extends DrawingState {
 
     @Override
     public void processRelease() {
-        if (!controller.getSelection().isEmpty()) {
+        if (!controller.getSelection().isEmpty() && isMoveStart) {
             MoveAction action = new MoveAction(controller.getDrawing().getSelection(), new Point(0, 0), controller.getDrawing(), true);
 
             controller.addAction(action);
